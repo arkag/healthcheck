@@ -1,3 +1,3 @@
-module healthcheck_fetch
+module kagno.com/healthcheck
 
 go 1.23.1
