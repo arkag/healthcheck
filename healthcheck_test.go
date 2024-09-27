@@ -6,26 +6,6 @@ import (
 	"testing"
 )
 
-// TestHelloName calls greetings.Hello with a name, checking
-// for a valid return value.
-func TestHelloName(t *testing.T) {
-	name := "Gladys"
-	want := regexp.MustCompile(`\b` + name + `\b`)
-	msg, err := Hello("Gladys")
-	if !want.MatchString(msg) || err != nil {
-		t.Fatalf(`Hello("Gladys") = %q, %v, want match for %#q, nil`, msg, err, want)
-	}
-}
-
-// TestHelloEmpty calls greetings.Hello with an empty string,
-// checking for an error.
-func TestHelloEmpty(t *testing.T) {
-	msg, err := Hello("")
-	if msg != "" || err == nil {
-		t.Fatalf(`Hello("") = %q, %v, want "", error`, msg, err)
-	}
-}
-
 func TestParseYaml(t *testing.T) {
 	data, err := ParseYaml("test_input.yml")
 	want := regexp.MustCompile("HealthCheckItem")
@@ -35,5 +15,39 @@ func TestParseYaml(t *testing.T) {
 
 	if !want.MatchString(typeName) || err != nil {
 		t.Fatalf(`ParseYaml("test_input.yml") = %q, %v, want match for %#q, nil`, typeName, err, want)
+	}
+}
+
+func TestGetEndpointHosts(t *testing.T) {
+	items, err := ParseYaml("test_input.yml")
+	data := GetEndpointHosts(items)
+
+	if data == nil || err != nil {
+		t.Fatalf(`GetEndpointHosts(HealthCheckItem) = nil, want populated`)
+	}
+}
+
+func TestSendHealthCheckUp(t *testing.T) {
+	want := "UP"
+	hci := HealthCheckItem{
+		Name: "Google test",
+		Url:  "https://www.google.com",
+	}
+	status := SendHealthCheck(hci)
+	if status != want {
+		t.Fatalf(`HCI for Google != %v, want %v`, want, want)
+	}
+}
+
+func TestSendHealthCheckDown(t *testing.T) {
+	want := "DOWN"
+	hci := HealthCheckItem{
+		Name:   "Google test",
+		Method: "POST",
+		Url:    "https://www.google.com/v4/somefunc",
+	}
+	status := SendHealthCheck(hci)
+	if status != want {
+		t.Fatalf(`HCI for Google != %v, want %v`, want, want)
 	}
 }

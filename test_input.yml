@@ -17,3 +17,19 @@
   url: https://fetch.com/some/post/endpoint
 - name: fetch rewards index page
   url: https://www.fetchrewards.com/
+- name: fetch rewards index page
+  url: https://fetchrewards.com/
+- name: google
+  url: https://www.google.com/
+- name: google api?
+  url: https://www.google.com/api/v6/somefunc
+  method: POST
+- name: google search
+  method: GET
+  url: https://www.google.com/search?q=bananas
+- name: ddg
+  method: GET
+  url: https://duckduckgo.com
+- name: ddg api?
+  method: POST
+  url: https://duckduckgo.com/api/v4/somefunc
