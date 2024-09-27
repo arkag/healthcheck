@@ -1,8 +1,10 @@
-package healthcheck
+package main
 
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -47,4 +49,35 @@ func ParseYaml(filename string) ([]HealthCheckItem, error) {
 	}
 
 	return items, nil
+}
+
+func GetEndpointHosts(items []HealthCheckItem) map[string][]HealthCheckItem {
+	hosts := make(map[string][]HealthCheckItem)
+	for i := range items {
+		parsed, _ := url.Parse(items[i].Url)
+		host := parsed.Host
+		hosts[host] = append(hosts[host], items[i])
+	}
+	return hosts
+}
+
+func SendHealthCheck(hci HealthCheckItem) string {
+	resp, err := http.Get("http://example.com/")
+
+	if resp.StatusCode == 200 && err == nil {
+		return "UP"
+	} else {
+		return "DOWN"
+	}
+}
+
+func main() {
+	items, _ := ParseYaml("test_input.yml")
+	hosts := GetEndpointHosts(items)
+	for host, items := range hosts {
+		fmt.Println("Host: " + host)
+		for _, hci := range items {
+			fmt.Println("\t" + hci.Url)
+		}
+	}
 }
