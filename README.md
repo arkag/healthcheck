@@ -16,10 +16,12 @@ This code allows you to provide a YAML configuration file to a binary, which wil
 
 You should see some output like so:
 
-> www.fetchrewards.com has 0% availability percentage
-> fetchrewards.com has 0% availability percentage
-> www.google.com has 66% availability percentage
-> duckduckgo.com has 50% availability percentage
+```
+www.fetchrewards.com has 0% availability percentage
+fetchrewards.com has 0% availability percentage
+www.google.com has 66% availability percentage
+duckduckgo.com has 50% availability percentage
+```
 
 ## Other Options
 
